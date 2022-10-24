@@ -3,44 +3,51 @@ from sys import argv
 # 
 # By using this file, you are agreeing to this product's EULA
 #
-# This product can be obtained in https://github.com/jespb/Python-StdGP
+# This product can be obtained in https://github.com/jespb/Python-STGP
 #
-# Copyright ©2019-2022 J. E. Batista
+# Copyright ©2019-2021 J. E. Batista
 #
 
 
 # Operators to be used by the models
 # Only these operators are available. To add mode, edit m3gp.Node.calculate(self, sample)
+OPERATORS = ["+","-","*","/"]  # "max","min"
 
-#OPERATORS = [("+",2),("-",2),("*",2),("/",2),("log2",1), ("max", 3)] # Example
-OPERATORS = [("+",2),("-",2),("*",2),("/",2)] # Default
+# Initial Maximum depth (3/6)
+MAX_DEPTH = 3
 
-# Initial Maximum depth
-MAX_DEPTH = 6
+# Number of models in the population (500)
+POPULATION_SIZE = 300
 
-# Number of models in the population
-POPULATION_SIZE = 500
-
-# Maximum number of iterations
+# Maximum number of iterations (100)
 MAX_GENERATION = 100
 
 # Fraction of the dataset to be used as training (used by Main_M3GP_standalone.py)
 TRAIN_FRACTION = 0.70
 
-# Number of individuals to be used in the tournament
+# Number of individuals to be used in the tournament (5)
 TOURNAMENT_SIZE = 5
 
-# Number of best individuals to be automatically moved to the next generation
+# Number of best individuals to be automatically moved to the next generation (1)
 ELITISM_SIZE = 1
 
-# Shuffle the dataset (used by Main_M3GP_standalone.py)
+# Shuffle the dataset (used by Main_M3GP_standalone.py) (True)
 SHUFFLE = True
 
-# Dimensions maximum depth
-LIMIT_DEPTH=17
+# Dimensions maximum depth (6/17)
+LIMIT_DEPTH = 6
 
-# Number of runs (used by Main_M3GP_standalone.py)
-RUNS = 30
+# Number of runs (used by Main_M3GP_standalone.py) (30)
+RUNS = 1
+
+# Use K-Fold data splitting or not
+KFOLD = 0
+
+# Use Semi-supervised classification or not
+SSUP = 0
+
+# Number of folds for K-Fold, not used if KFOLD = 0
+SPLITS = 10
 
 # Verbose
 VERBOSE = True
@@ -48,21 +55,11 @@ VERBOSE = True
 # Number of CPU Threads to be used
 THREADS = 1
 
-# Random state
-RANDOM_STATE = 42
-
-# Models wrapped by the StdGP models
-MODEL_NAME = ["SimpleThresholdClassifier"][0]
-
-# Fitness used by the M3GP models
-FITNESS_TYPE = ["Accuracy", "MSE", "WAF", "2FOLD"][0]
-
-
 
 DATASETS_DIR = "datasets/"
 OUTPUT_DIR = "results/"
 
-DATASETS = ["heart.csv"]
+DATASETS = ["BrasilScalNeg.csv"]  # BrasilScalNeg / ProteinScalNeg
 OUTPUT = "Classification"
 
 
@@ -82,9 +79,6 @@ if "-runs" in argv:
 
 if "-op" in argv:
 	OPERATORS = argv[argv.index("-op")+1].split(";")
-	for i in range(len(OPERATORS)):
-		OPERATORS[i] = OPERATORS[i].split(",")
-		OPERATORS[i][1] = int(OPERATORS[i][1])
 
 if "-md" in argv:
 	MAX_DEPTH = int(argv[argv.index("-md")+1])
@@ -112,8 +106,5 @@ if "-s" in argv:
 
 if "-t" in argv:
 	THREADS = int(argv[argv.index("-t")+1])
-
-if "-rs" in argv:
-	RANDOM_STATE = int(argv[argv.index("-rs")+1])
 
 
